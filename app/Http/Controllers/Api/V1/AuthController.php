@@ -30,4 +30,11 @@ class AuthController extends Controller
 
         return $this->response(['user' => new UserResource($data['user']), 'token' => $data['token']], HttpStatusCodeUtil::OK);
     }
+
+    public function logout()
+    {
+        $this->service->logout();
+
+        return $this->response([], HttpStatusCodeUtil::OK, 'User logged out successfully!');
+    }
 }
