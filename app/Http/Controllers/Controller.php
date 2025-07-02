@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Util\HttpStatusCodeUtil;
-use Illuminate\Support\Facades\App;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\App;
 
 class Controller extends BaseController
 {
@@ -80,7 +80,7 @@ class Controller extends BaseController
                 'currentPage' => $paginator->currentPage(),
                 'nextPage' => $paginator->hasMorePages() ? $paginator->currentPage() + 1 : null,
                 'previousPage' => $paginator->currentPage() > 1 ? $paginator->currentPage() - 1 : null,
-            ]
+            ],
         ];
     }
 
@@ -89,7 +89,7 @@ class Controller extends BaseController
         $uri = request()->getRequestUri();
 
         if (preg_match('/\/v(\d+)\//', $uri, $matches)) {
-            return (int)$matches[1];
+            return (int) $matches[1];
         }
 
         return 1;
