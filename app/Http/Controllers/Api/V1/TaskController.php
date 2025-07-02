@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ListTasksRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskStatusRequest;
 use App\Http\Resources\TaskResource;
@@ -13,6 +14,13 @@ use App\Util\HttpStatusCodeUtil;
 class TaskController extends Controller
 {
     public function __construct(protected TaskService $service) {}
+
+    public function index(ListTasksRequest $request)
+    {
+        $tasks = $this->service->list($request->validated());
+
+        return $this->response(TaskResource::collection($tasks), HttpStatusCodeUtil::OK);
+    }
 
     public function store(StoreTaskRequest $request)
     {

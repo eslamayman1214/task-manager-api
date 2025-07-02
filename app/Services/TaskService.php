@@ -10,6 +10,11 @@ class TaskService
 {
     public function __construct(protected TaskRepository $repository) {}
 
+    public function list(array $filters)
+    {
+        return $this->repository->getUserTasks($filters);
+    }
+
     public function store(array $data)
     {
         return $this->repository->create($data);

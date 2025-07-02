@@ -17,13 +17,4 @@ enum TaskPriority: string
             self::HIGH => 'High',
         };
     }
-
-    public function sortOrder(): int
-    {
-        return match ($this) {
-            self::HIGH => 1,
-            self::MEDIUM => 2,
-            self::LOW => 3,
-        };
-    }
 }
