@@ -25,6 +25,15 @@ class TaskController extends Controller
     {
         $task = $this->service->updateStatus($task, $request->validated()['status']);
 
-        return $this->response(new TaskResource($task), HttpStatusCodeUtil::OK);
+        return $this->response(new TaskResource($task), HttpStatusCodeUtil::OK, 'Task status updated successfully.');
+    }
+
+    public function destroy(Task $task)
+    {
+        $this->authorize('delete', $task);
+
+        $this->service->delete($task);
+
+        return $this->response([], HttpStatusCodeUtil::OK, 'Task deleted successfully.');
     }
 }

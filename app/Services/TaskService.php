@@ -26,4 +26,9 @@ class TaskService
 
         return $this->repository->updateStatus($task, $newStatusEnum->value);
     }
+
+    public function delete(Task $task): void
+    {
+        $this->repository->delete($task);
+    }
 }
