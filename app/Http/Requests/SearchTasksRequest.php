@@ -2,20 +2,16 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\TaskStatus;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 
-class UpdateTaskStatusRequest extends FormRequest
+class SearchTasksRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        $task = $this->route('task');
-
-        return $task && auth()->id() === $task->user_id;
+        return true;
     }
 
     /**
@@ -26,7 +22,7 @@ class UpdateTaskStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['required', new Enum(TaskStatus::class)],
+            'q' => ['required', 'string', 'min:2'],
         ];
     }
 
@@ -38,8 +34,9 @@ class UpdateTaskStatusRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'status.required' => 'The status field is required.',
-            'status.enum' => 'The selected status is invalid.',
+            'q.required' => 'The search query is required.',
+            'q.string' => 'The search query must be a string.',
+            'q.min' => 'The search query must be at least 2 characters long.',
         ];
     }
 }

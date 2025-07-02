@@ -9,9 +9,9 @@ class TaskRepository
 {
     public function __construct(protected TaskFilter $filter) {}
 
-    public function getUserTasks(array $filters)
+    public function getUserTasks(int $page, int $perPage, array $filters)
     {
-        return $this->filter->apply(auth()->user()->tasks()->getQuery(), $filters)->get();
+        return $this->filter->apply(auth()->user()->tasks()->getQuery(), $filters)->paginate($perPage, ['*'], 'page', $page);
     }
 
     public function create(array $data): Task
@@ -29,5 +29,12 @@ class TaskRepository
     public function delete(Task $task): void
     {
         $task->delete();
+    }
+
+    public function searchUserTasks(int $page, int $perPage, string $term)
+    {
+        return Task::search($term)
+            ->query(fn ($q) => $q->where('user_id', auth()->id()))
+            ->paginate($perPage, 'page', $page);
     }
 }

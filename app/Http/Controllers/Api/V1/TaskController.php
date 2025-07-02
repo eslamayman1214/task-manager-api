@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ListTasksRequest;
+use App\Http\Requests\SearchTasksRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskStatusRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Services\TaskService;
 use App\Util\HttpStatusCodeUtil;
+use App\Util\PaginationUtil;
 
 class TaskController extends Controller
 {
@@ -17,9 +19,11 @@ class TaskController extends Controller
 
     public function index(ListTasksRequest $request)
     {
-        $tasks = $this->service->list($request->validated());
+        $paginator = $this->service->list($request->get('page', PaginationUtil::PAGE), $request->get('per_page', PaginationUtil::LIMIT), $request->validated());
 
-        return $this->response(TaskResource::collection($tasks), HttpStatusCodeUtil::OK);
+        $resourceData = TaskResource::collection($paginator);
+
+        return $this->response($this->formatPaginationData($resourceData, $paginator), HttpStatusCodeUtil::OK);
     }
 
     public function store(StoreTaskRequest $request)
@@ -43,5 +47,13 @@ class TaskController extends Controller
         $this->service->delete($task);
 
         return $this->response([], HttpStatusCodeUtil::OK, 'Task deleted successfully.');
+    }
+
+    public function search(SearchTasksRequest $request)
+    {
+        $paginator = $this->service->search($request->get('page', PaginationUtil::PAGE), $request->get('per_page', PaginationUtil::LIMIT), $request->validated()['q']);
+        $resourceData = TaskResource::collection($paginator);
+
+        return $this->response($this->formatPaginationData($resourceData, $paginator), HttpStatusCodeUtil::OK, 'Search results retrieved successfully.');
     }
 }
