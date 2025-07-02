@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskStatusRequest;
 use App\Http\Resources\TaskResource;
+use App\Models\Task;
 use App\Services\TaskService;
 use App\Util\HttpStatusCodeUtil;
 
@@ -17,5 +19,12 @@ class TaskController extends Controller
         $task = $this->service->store($request->validated());
 
         return $this->response(new TaskResource($task), HttpStatusCodeUtil::CREATED);
+    }
+
+    public function updateStatus(UpdateTaskStatusRequest $request, Task $task)
+    {
+        $task = $this->service->updateStatus($task, $request->validated()['status']);
+
+        return $this->response(new TaskResource($task), HttpStatusCodeUtil::OK);
     }
 }

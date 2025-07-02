@@ -9,4 +9,5 @@ Route::prefix('v1/')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::post('tasks', [TaskController::class, 'store'])->middleware('auth:sanctum');
+    Route::patch('tasks/{task}/status', [TaskController::class, 'updateStatus'])->middleware('auth:sanctum');
 });

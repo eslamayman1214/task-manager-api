@@ -10,4 +10,11 @@ class TaskRepository
     {
         return auth()->user()->tasks()->create($data);
     }
+
+    public function updateStatus(Task $task, string $status): Task
+    {
+        $task->update(['status' => $status]);
+
+        return $task;
+    }
 }
