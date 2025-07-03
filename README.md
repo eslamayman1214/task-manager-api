@@ -1,61 +1,173 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Task Manager API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A robust Laravel-based Task Management API with authentication, task prioritization, full-text search, notifications, and advanced filtering.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Authentication**
+  - Register, login, and logout using Laravel Sanctum
+- **Task Management**
+  - Create, update status, soft delete, list, and search tasks
+  - Status transitions: `Pending → In Progress → Completed`
+- **Task Prioritization**
+  - Assign priorities: Low, Medium, or High
+- **Advanced Filtering**
+  - Filter by status, due date range; sort by priority, due date, or created_at
+- **Full-Text Search**
+  - Uses Laravel Scout and Meilisearch for searching titles and descriptions
+- **Reminders**
+  - Hourly Artisan command queues email notifications 24h before task due
+- **Rate Limiting**
+  - Rate limiting behavior on task creation (5 requests/min)
+- **Clean Architecture**
+  - Controller → Service → Repository pattern
+  - API Resources for clean and consistent JSON responses
+- **API Documentation**
+  - Swagger (OpenAPI) UI auto-generated via L5-Swagger
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🛠 Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Laravel 12**
+- **PHP 8.2+**
+- **MySQL** – Relational database
+- **Laravel Sanctum** – API token authentication
+- **Laravel Scout + Meilisearch** – Full-text search
+- **Laravel Queues** – For sending notifications
+- **L5-Swagger** – Auto-generated API documentation
+- **PHP Enums** – Strongly-typed status and priority logic
+- **Laravel Pint** – Opinionated PHP code style fixer for minimalists.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 📦 Installation
 
-## Laravel Sponsors
+```bash
+git clone https://github.com/eslamayman1214/task-manager-api.git
+cd task-manager-api
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+composer install
+cp .env.example .env
+php artisan key:generate
 
-### Premium Partners
+php artisan migrate
+php artisan db:seed
+````
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+**Generate Swagger Docs:**
 
-## Contributing
+```bash
+php artisan l5-swagger:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Run the app:**
 
-## Code of Conduct
+```bash
+php artisan serve
+# Available at http://127.0.0.1:8000
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**Run queue worker (reminders):**
 
-## Security Vulnerabilities
+```bash
+php artisan queue:work --queue=notifications
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**Run scheduler (reminder check):**
 
-## License
+```bash
+php artisan schedule:run
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 🔐 Authentication
+
+Uses Laravel Sanctum. After login/register, include the token:
+
+```
+Authorization: Bearer {your_token}
+```
+
+---
+
+
+## ⏰ Scheduled Task Reminders
+
+This API includes a custom Artisan command to send email reminders 24 hours before a task is due:
+
+```bash
+php artisan tasks:send-reminders
+```
+
+```bash
+php artisan tasks:send-reminders --dry-run
+```
+
+* The --dry-run option allows previewing which tasks would trigger reminders, without sending actual emails**
+
+
+
+## 🧪 Testing
+
+```bash
+php artisan test
+```
+
+Includes:
+
+* Unit & Feature tests
+* Factories & seeders
+* Auth & validation coverage
+
+---
+
+## 📚 API Documentation
+
+Swagger UI:
+[http://localhost:8000/api/documentation]
+
+Includes:
+
+* Endpoint descriptions
+* Request/response schemas
+* Auth & error handling details
+
+---
+
+## 📌 Design Principles
+
+* **SOLID** principles applied throughout services
+* **Enum transitions** enforce business rules
+* **Policy-based authorization** for per-user access control
+* **Queue-based notifications** for scalable background tasks
+* **Modular architecture** for clean, testable components
+
+---
+
+## 📂 Key Folders
+
+* `app/Http/Controllers/Api/V1` – API endpoint controllers
+* `app/Http/Requests` – Request validation logic
+* `app/Http/Resources` – JSON response formatting
+* `app/Services` – Business logic for tasks and auth
+* `app/Repositories` – Data access and task queries
+* `app/Filters` – Custom filters for task listing
+* `app/Enums` – Task priority and status enums
+* `app/Policies` – Authorization rules for tasks
+* `app/Notifications` – Email notification classes
+* `app/Console/Commands` – Artisan command for reminders
+* `app/Util` – Reusable helpers (e.g., HTTP codes, pagination)
+
+---
+
+## 👨‍💻 Author
+
+**Eslam**
+GitHub: [https://github.com/eslamayman1214](https://github.com/eslamayman1214)
+Email: [eslamayman1214@gmail.com](mailto:eslamayman1214@gmail.com)
+
+```
