@@ -16,7 +16,7 @@ class TaskRepository
 
     public function create(array $data): Task
     {
-        return auth()->user()->tasks()->create($data);
+        return auth()->user()->tasks()->create($data)->refresh();
     }
 
     public function updateStatus(Task $task, string $status): Task

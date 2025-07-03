@@ -114,6 +114,7 @@ php artisan tasks:send-reminders --dry-run
 ## 🧪 Testing
 
 ```bash
+php artisan optimize
 php artisan test
 ```
 
