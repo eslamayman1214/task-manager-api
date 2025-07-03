@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+// Schedule a command to send task reminders every hour
+Schedule::command('tasks:send-reminders')
+    ->hourly()
+    ->withoutOverlapping(10) // Prevent overlapping executions
+    ->runInBackground();  // work in the background without blocking the main process (work asynchronously)

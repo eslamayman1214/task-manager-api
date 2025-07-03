@@ -21,6 +21,7 @@ class TaskResource extends JsonResource
                 'value' => $this->priority,
                 'label' => $this->priority->label(),
             ],
+            'is_reminder_sent' => $this->is_reminder_sent,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

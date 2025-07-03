@@ -24,11 +24,33 @@ class TaskFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph,
+            'title' => fake()->sentence(),
+            'description' => fake()->paragraph(),
             'due_date' => now()->addDays(rand(1, 10)),
             'status' => TaskStatus::PENDING->value,
             'priority' => TaskPriority::MEDIUM->value,
+            'is_reminder_sent' => false,
         ];
+    }
+
+    public function pending(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => TaskStatus::PENDING->value,
+        ]);
+    }
+
+    public function completed(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => TaskStatus::COMPLETED->value,
+        ]);
+    }
+
+    public function reminded(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_reminder_sent' => true,
+        ]);
     }
 }
