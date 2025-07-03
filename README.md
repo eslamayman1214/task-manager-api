@@ -128,7 +128,7 @@ Includes:
 ## 📚 API Documentation
 
 Swagger UI:
-[http://localhost:8000/api/documentation]
+[http://localhost:8000/api/documentation](http://localhost:8000/api/documentation)
 
 Includes:
 
@@ -166,7 +166,7 @@ Includes:
 
 ## 👨‍💻 Author
 
-**Eslam**
+**Eslam Ayman**
 GitHub: [https://github.com/eslamayman1214](https://github.com/eslamayman1214)
 Email: [eslamayman1214@gmail.com](mailto:eslamayman1214@gmail.com)
 
