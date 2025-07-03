@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,5 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->renderable(function (Throwable $e, $request) {
+            if ($e instanceof ThrottleRequestsException) {
+                return response()->json([
+                    'message' => 'Too many requests. Please slow down.',
+                    'retry_after_seconds' => $e->getHeaders()['Retry-After'] ?? 60,
+                ], 429);
+            }
+        });
     })->create();
